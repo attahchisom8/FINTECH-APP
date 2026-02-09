@@ -12,4 +12,5 @@ export const generateToken = async (userId: string) => {
 	);
 }
 
-await console.log(`jwt key: ${generateToken("some password")}`);
+// const token = await generateToken("some id");
+//  console.log(`jwt key: ${token}`);
