@@ -1,0 +1,9 @@
+# Environment variables declared in this file are NOT automatically loaded by Prisma.
+# Please add `import "dotenv/config";` to your `prisma.config.ts` file, or use the Prisma CLI with Bun
+# to load environment variables from .env files: https://pris.ly/prisma-config-env-vars.
+
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+DATABASE_URL="mongodb+srv://mastermose:12345abcde@fintech-spp.j8asa4h.mongodb.net/fintech-app-db?appName=fintech-spp"
+JWT_KEY=" 622c6a37f6cdbea9eafe7ae9029f450e9216324661e7110cf1427cdc1f46f181"
