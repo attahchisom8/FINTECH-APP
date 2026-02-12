@@ -7,7 +7,12 @@ import ProtectedRoute from "@/components/protectedRoutes";
 
 export default function Dashboard() {
 	const router = useRouter();
-	const [user, setUser] = useState<{email: string} | null>(null);
+	const [user, setUser] = useState<{
+    email: string,
+    firstName: string,
+    middleName?: string
+    lastName: string,
+  } | null>(null);
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
@@ -18,7 +23,7 @@ export default function Dashboard() {
 
 		const fetchUser =  async () => {
 			try {
-				const res = await api.get("/user/proile");
+				const res = await api.get("/user/profile");
 				setUser(res.data);
 			} catch (err) {
 				router.push("/login");
@@ -28,22 +33,22 @@ export default function Dashboard() {
 		fetchUser();
 	}, [router]); // leaving the array empty i the same thing
 
-	const handleLogout = () {
+	const handleLogout = () => {
 		localStorage.removeItem("token");
 		router.push("/login");
 	}
 
 	return (
 		<ProtectedRoute>
-			<div className="s=dash-page">
-			<header className="dsash-header">
+			<div className="dash-page">
+			<header className="dash-header">
 				<h1>Dashboard</h1>
-				<p className="text-green">
+				<h2 className="text-green">
 				Welcome Back
-				{user.firstName}{" "}
-				{user.middleName} ? {user.middleName} : ""
+				{user?.firstName}{" "}
+				{user?.middleName ? user.middleName + " " : ""}
 				{user.lastName}
-				</p>
+				</h2>
 				<button
 				className="logout-btn"
 				onClick={handleLogout}>
@@ -57,7 +62,7 @@ export default function Dashboard() {
 				</section>
 				<section className="transaction-section">
 					<h2>Recent Transactions</h2>
-					<ul classname="trans-list">
+					<ul className="trans-list">
 						<li>Sent N20,000 to Mr Smith</li>
 						<li>Recieved N40, 000 from Silicy</li>
 						<li>Deposited N100, 000</li>
