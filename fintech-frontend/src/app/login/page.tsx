@@ -8,6 +8,7 @@ export default function LoginPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
+	const [showPwd, setShowPwd] = useState(false);
 	const router = useRouter();
 
 	const handleLogin = async (e: React.SubmitEvent) => {
@@ -47,13 +48,20 @@ export default function LoginPage() {
 						<label htmlFor="password">Password</label>
 						<input
 							id="password"
-							type="password"
+							type={showPwd ? "text" : "password"}
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							placeholder="*****"
 							required
 							className="login-password"
 						/>
+						<button
+							type="button" // important! set to buuton so i doesnt submit the form
+							onClick={() => setShowPwd(!showPwd)}
+							className="show-password-btn"	
+						>
+							{showPwd ? "Hide" : "Show"}
+						</button>
 					</div>
 					<div className="btn-box">
 						<button

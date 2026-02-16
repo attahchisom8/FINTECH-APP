@@ -31,7 +31,7 @@ export default function Dashboard() {
 		};
 
 		fetchUser();
-	}, [router]); // leaving the array empty i the same thing
+	}, [router]); // use effect runs as many times as router changes
 
 	const handleLogout = () => {
 		localStorage.removeItem("token");
@@ -47,7 +47,7 @@ export default function Dashboard() {
 				Welcome Back
 				{user?.firstName}{" "}
 				{user?.middleName ? user.middleName + " " : ""}
-				{user.lastName}
+				{user?.lastName}
 				</h2>
 				<button
 				className="logout-btn"

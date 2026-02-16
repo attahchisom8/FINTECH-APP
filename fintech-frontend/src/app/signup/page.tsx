@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useDebugValue, useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 import Link from "next/link";
+import { useStyleRegistry } from "styled-jsx";
 
 
 export default function SignUpPage() {
@@ -13,6 +14,7 @@ export default function SignUpPage() {
 	const [firstName, setFirstName] = useState("");
 	const [lastName, setLastName] = useState("");
 	const [middleName, setMiddleName] = useState	("");
+	const [showPwd, setShowPwd] = useState(false);
 	const router = useRouter();
 
 	const handleLogin = async (e: React.SubmitEvent) => {
@@ -20,7 +22,13 @@ export default function SignUpPage() {
 		setError("");
 
 		try {
-			const response = await api.post("/auth/login", {email, password});
+			const response = await api.post("/auth/signup", {
+				email,
+				password,
+				firstName,
+				middleName,
+				lastName,
+			});
 			const token = response.data.token;
 			localStorage.setItem("token", token);
 			router.push("/dashboard")
@@ -31,8 +39,8 @@ export default function SignUpPage() {
 	}
 
 	return (
-		<div className="login-section">
-			<h1 className="purple-text">AI FINTECH APP</h1>
+		<div className="signup-section">
+			<h1 className="purple-text">AI FINTECH APP SIGN UP</h1>
 			{error && (<p className="text-red">{error}</p>)}
 			<div className="signup-card">
 				<form onSubmit={handleLogin}>
@@ -84,13 +92,20 @@ export default function SignUpPage() {
 						<label htmlFor="password">Password</label>
 						<input
 							id="password"
-							type="password"
+							type={showPwd ? "text" : "password"}
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							placeholder="*****"
 							required
 							className="sign-password"
 						/>
+						<button
+							type="button" // important! set to buuton so i doesnt submit the form
+							onClick={() => setShowPwd(!showPwd)}
+							className="show-password-btn"	
+						>
+							{showPwd ? "Hide" : "Show"}
+						</button>
 					</div>
 					<div className="btn-box">
 						<button

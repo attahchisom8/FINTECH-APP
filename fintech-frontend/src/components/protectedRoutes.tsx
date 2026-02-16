@@ -12,7 +12,7 @@ const ProtectedRoute = ({children}: {children: React.ReactNode}) => {
 			return redirect("/login"); // or router.push("/login")
 	}, []);
 
-	return <>children</>
+	return <>{children}</>
 }
 
 export default ProtectedRoute;
