@@ -18,9 +18,9 @@ model User {
   id    String  @id @default(auto()) @map("_id") @db.ObjectId
   email String  @unique
   password  String
-  firstName String?
+  firstName String
   middleName String?
-  lastName String?
+  lastName String
   wallet Wallet[]
   isActive Boolean @default(true)
   createdAt DateTime @default(now())
