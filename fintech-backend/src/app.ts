@@ -2,6 +2,7 @@ import type { Application, Request, Response } from "express";
 import express from "express";
 import userRouter from "./routes/user.routes";
 import authRouter from "./routes/auth.routes";
+import aiRouter from "./routes/ai.routes" 
 import cors from "cors";
 
 const app: Application = express();
@@ -21,5 +22,6 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/ai", aiRouter);
 
 export default	app;
