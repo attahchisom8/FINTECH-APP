@@ -27,7 +27,7 @@ export const signUp = async (req: Request, res: Response) => {
 				lastName,
 				email,
 				password: hashedPassword,
-				wallet: {
+				wallets: {
 					create: {balance: 0}
 				}
 			}

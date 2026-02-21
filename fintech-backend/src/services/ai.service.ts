@@ -1,10 +1,6 @@
-import {compose} from "node:stream";
 import { transformMessage } from "../utils/transform";
-import { GoogleGenAI } from "@google/genai";
+import { client } from "../utils/aiClient";
 
-const client = new GoogleGenAI({
-	apiKey: process.env.GOOGLE_GEMINI_KEY as string,
-});
 
 export const generateAlResponse = async (prompt: string) => {
 	const messages = [
