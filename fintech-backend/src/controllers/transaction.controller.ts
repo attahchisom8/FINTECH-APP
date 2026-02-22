@@ -15,7 +15,7 @@ export const createCategory = async (req: Request, res: Response) => {
 				category,
 			}
 		});
-		res.status(201).json({ transaction });
+		res.status(201).json(transaction);
 	} catch (err: any) {
 		console.error("Conyrollet Error: [details] -->\t", err)
 		res.status(500).json({message: "Internal Server Error"});
