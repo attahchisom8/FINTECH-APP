@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import api from "@/lib/api";
 import ProtectedRoute from "@/components/protectedRoutes";
+import Link from "next/link";
 
 export default function Dashboard() {
 	const router = useRouter();
@@ -12,7 +13,10 @@ export default function Dashboard() {
     firstName: string,
     middleName?: string
     lastName: string,
+    isNewUser: boolean,
   } | null>(null);
+  const searchParams = useSearchParams();
+  const isFirstTime = searchParams.get("firstTime") === "true";
 
 	useEffect(() => {
 		const token = localStorage.getItem("token");
@@ -24,14 +28,22 @@ export default function Dashboard() {
 		const fetchUser =  async () => {
 			try {
 				const res = await api.get("/user/profile");
-				setUser(res.data);
-			} catch (err) {
+        const userData = res.data;
+				setUser(userData);
+
+        // Do something only first time usets can see then age the user
+        if (userData.isNewUser) {
+          // doSomethingForNewUsers();
+          const uptdRes = await api.post("/user/profile/set-old", { isNewUser: false });
+          setUser(uptdRes.data);
+        }
+      } catch (err) {
 				router.push("/login");
 			}
-		};
+    }
 
 		fetchUser();
-	}, [router]); // use effect runs as many times as router changes
+  }, [router]); // use effect runs as many times as router changes
 
 	const handleLogout = () => {
 		localStorage.removeItem("token");
@@ -44,7 +56,7 @@ export default function Dashboard() {
 			<header className="dash-header">
 				<h1>Dashboard</h1>
 				<h2 className="text-green">
-				Welcome Back
+				Welcome { isFirstTime ? "" : "Back " }
 				{user?.firstName}{" "}
 				{user?.middleName ? user.middleName + " " : ""}
 				{user?.lastName}
@@ -53,7 +65,25 @@ export default function Dashboard() {
 				className="logout-btn"
 				onClick={handleLogout}>
 					Logout
-				</button>
+				</button>{" "}
+        <button                                     type="button"
+          className="trans-btn"                    >
+            <Link href="/dashboard/transaction">
+              Add Transaction
+            </Link>
+          </button>{" "}
+          <button                                   type="button"
+          className="cancel-btn"                    >                                         <Link href="/dashboard/fund">                                                       Add Fund
+            </Link>
+        </button>{" "}
+        <button
+          type="button"
+          className="chat-btn"
+        >
+          <Link href="/dashboard/chat">
+              Chat with Ambrose
+          </Link>
+        </button>{" "}
 			</header>
 			<main>
 				<section className="wallet-section">
