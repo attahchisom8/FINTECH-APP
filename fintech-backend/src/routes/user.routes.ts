@@ -1,7 +1,7 @@
 import { Router } from "express";
 import prisma from "../config/prisma";
 import { authMiddleWare } from "../middleware/auth.middleware";
-import { profile } from "../controllers/user.controller";
+import { profile, setToOldUser } from "../controllers/user.controller";
 
 const userRouter = Router();
 
@@ -13,5 +13,6 @@ const userRouter = Router();
 }); */
 
 userRouter.get("/profile", authMiddleWare, profile);
+userRouter.post("/profile/set-old", authMiddleWare, setToOldUser);
 
 export default userRouter;
