@@ -5,6 +5,7 @@ import authRouter from "./routes/auth.routes";
 import aiRouter from "./routes/ai.routes"
 import transactionRouter from "./routes/transaction.routes"
 import walletRouter from "./routes/wallet.routes";
+import insightRouter from "./routes/insights.routes";
 import cors from "cors";
 
 const app: Application = express();
@@ -27,5 +28,6 @@ app.use("/api/auth", authRouter);
 app.use("/api/ai", aiRouter);
 app.use("/api/ai", transactionRouter);
 app.use("/api/wallet", walletRouter);
+app.use("/api/insights", insightRouter)
 
 export default	app;

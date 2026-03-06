@@ -103,7 +103,15 @@ export default function Dashboard() {
 				<section className="ai-section">
 					<h2>AI insight</h2>
 					<p>Your spending increased 10% this week consider budgeting</p>
-				</section>
+          <button
+            type="button"
+            className="insights-btn"
+          >
+            <Link href="/dashboard/insights">
+              View AI Insihht
+            </Link>
+          </button>
+        </section>
 			</main>
 			</div>
 		</ProtectedRoute>
