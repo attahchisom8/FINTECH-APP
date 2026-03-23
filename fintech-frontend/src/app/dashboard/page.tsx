@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import api from "@/lib/api";
 import ProtectedRoute from "@/components/protectedRoutes";
+import ForecastCard from "@/components/ForecastCard";
+import ForecastChart from "@/components/ForecastChart";
 import Link from "next/link";
 
 export default function Dashboard() {
@@ -111,6 +113,10 @@ export default function Dashboard() {
               View AI Insihht
             </Link>
           </button>
+        </section>
+        <section className="forecast-section">
+          <ForecastCard />
+          <ForecastChart />
         </section>
 			</main>
 			</div>
