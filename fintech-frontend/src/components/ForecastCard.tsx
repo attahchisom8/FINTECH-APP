@@ -16,12 +16,12 @@ export default function ForecastCard() {
     fetchForcast();
   }, [fetchForcast]);
 
-  if (!loading)
+  if (loading)
     return <p>loading...</p>
   if (!forecastData)
     return <p>Wait a moment, loading forecast...</p>
   if (error)
-      return <p className="tezt-red">{ error }</p>
+      return <p className="text-red">{ error }</p>
 
   return (
     <div className="forecast-card">
