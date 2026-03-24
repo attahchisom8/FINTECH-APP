@@ -12,10 +12,10 @@ type Contents = {
 
 
 export const aiEngine = async ({
-    model = "",
+    model = "gemini-2.5-flash",
     systemInstruction = "",
     contents = [],
-    temperature = 0,
+    temperature = 0.1,
 } : {
       model?: string,
       systemInstruction?: string,
