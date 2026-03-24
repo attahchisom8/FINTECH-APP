@@ -23,7 +23,7 @@ export const detectFraud = async (
   Return JSON
   {
     risk: "low | medium | high",
-    reason: "short reason why its a fraud",
+    reason: "short reason why it's a fraud",
   }
   `;
   const messages = [
@@ -32,7 +32,7 @@ export const detectFraud = async (
       content: "You are ambrose, A proffesional fraud dwtector",
     },
     {
-      role: "assistant",
+      role: "user",
       content: prompt
     }
   ];
@@ -43,7 +43,7 @@ export const detectFraud = async (
       contents: chatMessages,
     });
     const rawText = fraudRes.text;
-    const fraudJson = rawText.replace(/```json|```/gi, "").trim();
+    const fraudJson = rawText?.replace(/```json|```/gi, "").trim() || "{}";
     return JSON.parse(fraudJson);
   } catch (err: any) {
     console.error('Service error: [details] -->\t', err);

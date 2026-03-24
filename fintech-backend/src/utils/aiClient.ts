@@ -20,7 +20,7 @@ export const aiEngine = async ({
       model?: string,
       systemInstruction?: string,
       contents?: Contents[],
-      temperature: number
+      temperature?: number
     }) => {
     try {
       const aiRes = await client.models.generateContent({
