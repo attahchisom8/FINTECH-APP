@@ -18,20 +18,21 @@ export const createCategory = async (req: authRequest, res: Response) => {
 				category,
 			}
 		});
+
 		const detectedFraud = await detectFraud({
 			...transaction,
 			location: "Nigeria",
 			currency: "NGN",
 			accountAge: "2 years",
 		});
-    
-    res.status(201).json({ category });
 
     if (detectedFraud.risk === "High")
       io.to(userId).emit("fraud-alert", {
         transactionId: transaction.id,
         ...detectedFraud
       });
+
+	  res.status(201).json({ category });
 
 	} catch (err: any) {
 		console.error("Conyrollet Error: [details] -->\t", err)

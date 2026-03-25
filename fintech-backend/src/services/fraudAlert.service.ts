@@ -30,7 +30,7 @@ export const detectFraud = async (
 
   Return JSON
   {
-    risk: "low | medium | high",
+    risk: "Low | Medium | High",
     reason: "short reason why it's a fraud",
   }
   `;

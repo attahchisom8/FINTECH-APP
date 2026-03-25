@@ -9,7 +9,7 @@ export default function handleSocketConnection(io: Server) {
 			console.log(`User ${ userId } joined the room`);
 		});
 		
-		socket.on("disconnect", (socket: any) => {
+		socket.on("disconnect", () => {
 			console.log("User disconnected", socket.id);
 		});
 	});
