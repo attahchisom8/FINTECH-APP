@@ -6,11 +6,13 @@ import api from "@/lib/api";
 import ProtectedRoute from "@/components/protectedRoutes";
 import ForecastCard from "@/components/ForecastCard";
 import ForecastChart from "@/components/ForecastChart";
+// import FraudAlert from "@/components/FraudAlert";
 import Link from "next/link";
 
 export default function Dashboard() {
 	const router = useRouter();
 	const [user, setUser] = useState<{
+	id: string,
     email: string,
     firstName: string,
     middleName?: string
@@ -30,7 +32,7 @@ export default function Dashboard() {
 		const fetchUser =  async () => {
 			try {
 				const res = await api.get("/user/profile");
-        const userData = res.data;
+        		const userData = res.data;
 				setUser(userData);
 
         // Do something only first time usets can see then age the user
@@ -48,7 +50,7 @@ export default function Dashboard() {
   }, [router]); // use effect runs as many times as router changes
 
 	const handleLogout = () => {
-		localStorage.removeItem("token");
+		localStorage.clear();
 		router.push("/login");
 	}
 
@@ -68,7 +70,8 @@ export default function Dashboard() {
 				onClick={handleLogout}>
 					Logout
 				</button>{" "}
-        <button                                     type="button"
+        <button
+		type="button"
           className="trans-btn"                    >
             <Link href="/dashboard/transaction">
               Add Transaction

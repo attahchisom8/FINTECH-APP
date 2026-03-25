@@ -32,10 +32,13 @@ export default function ForecastChart() {
       return <p className="text-red">{ error }</p>;
 
   return (
-    <div className="forecast-chart">
+    <div
+    style={{ width: "100%", height: "350px" }}
+      className="forecast-chart"
+    >
       <h2>View forecast data</h2>
-      <ResponsiveContainer width="100%" height="50%">
-        <LineChart data={ forecastData.charData }>
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={ forecastData.chartData }>
           <XAxis dataKey="month" stroke="#2277ff" />
           <YAxis stroke="#2277ff"/>
           <Line dataKey="balance" stroke="#882200" />

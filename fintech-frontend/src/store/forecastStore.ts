@@ -5,7 +5,7 @@ interface ForecastDataShape {
   predictedExpenses: number;
   predictedBalance: number;
   spendingTrend: string;
-  charData: {month: string, balance: number}[];
+  chartData: {month: string, balance: number}[];
 }
 
 interface ForecastShape {
@@ -33,7 +33,10 @@ export const useForcastStore = create<ForecastShape>((set, get) => ({
         loading: false
       });
     } catch (err: any) {
-      set({ error: err.response?.data?.message || "fwtchihg forecast failed" });
+      set({
+        error: err.response?.data?.message || "fwtchihg forecast failed",
+        loading: false,
+      });
     }
   }
 }))

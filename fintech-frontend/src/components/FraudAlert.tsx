@@ -1,51 +1,61 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { socket } from "@lib/socket.io";
-import { toast } from "modal";
-import {Sirivennela} from "next/font/google";
+import { socket } from "@/lib/socket.io";
+import { toast } from "sonner";
 
 export default function FraudAlert() {
-  const [fraudAlerts, setFraudAlerts] = useState<any[] | null>([]);
-  const [alwrtBox, setAlertBox] = useState<any | null>(null);
+  const [fraudAlerts, setFraudAlerts] = useState<any>([]);
+  const [alertBox, setAlertBox] = useState<any | null>(null);
 
   useEffect(() => {
-    async () => {
-      const userId: string = localStorage.get("userId");
+    const listenForFraud = () => {
+      const userId = localStorage.getItem("userId");
       if (!userId)
         return;
 
-      if (socket.on("disconnect"))
-        socket.on("connect");
+      if (!socket.connected)
+        socket.connect();
 
-      socket.wmit("join-room", userId);
+      socket.emit("join-room", userId);
 
-      socket.on("fraud-alert", (data) => {
-        setFraudAlerts((prev) => [ ...prev, data ]);
-        setCloseTab(data);
+      socket.on("fraud-alert", (data: any) => {
+        setFraudAlerts((prev: any) => [ ...prev, data ]);
+        console.log("⚠️ Suspicious activity detected", data);
+        toast.error("⚠️ Fraud Alert", {
+          description: data.reason
+        });
 
-        socket.off("fraud-alert");
+        setAlertBox(data);
       });
-    }
-  }(), []);
+
+      return () => socket.off("fraud-alert");
+    };
+    listenForFraud();
+  }, []);
 
   return (
     <div className="fraud-box">
       <div className="num-frauds">
-        <p> { fraudAlerts.length }</p>
+        <h3>⚠️ fraud Alerts: { fraudAlerts.length }</h3>
       </div>
-      <div className="alert-box">
-        { closeTab && (
-          <div className="closeTab">
-            toast("Fraud Alert");
-            <p>Ambrose detected suspicious transaction in { data.transactionId }</p>
-            <p>Reason: data.reason</p>
+      {alertBox && (
+        <div className="pop-up">
+          <div className="alert-box">
+            <h2>⚠️ Fraud Alert</h2>
+            <p>Ambrose detected suspicious transaction in transaction { alertBox.transactionId }</p>
+            <p><strong>Reason:</strong> {alertBox.reason}</p>
+            <p><strong>Risk level:</strong> {alertBox.risk}</p>
           </div>
-        )}
-        <button
-          onClick={ setCloseTab(null) }
-          className="close-btn">
-            close
+          <button
+            type="button"
+            onClick={() => setAlertBox(null) }
+            className="close-alert-btn"
+            >
+              close
           </button>
-      </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }

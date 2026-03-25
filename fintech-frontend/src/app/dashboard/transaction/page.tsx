@@ -4,6 +4,7 @@ import { useState } from "react"
 import api from "@/lib/api";
 import ProtectedRoute from "@/components/protectedRoutes";
 import Link from "next/link";
+import FraudAlert from "@/components/FraudAlert";
 
 export default function TransactionPage() {
 	const [amount, setAmount] = useState("");
@@ -41,7 +42,8 @@ export default function TransactionPage() {
           <button                                   type="button"
           className="cancel-btn"                    >                                         <Link href="/dashboard">
               Cancel
-            </Link>                               </button>
+            </Link>
+            <FraudAlert />                              </button>
         </header>
         <h2 className="text-title">Transactions</h2>
         <div className="box-err">

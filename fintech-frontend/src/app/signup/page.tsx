@@ -1,10 +1,9 @@
 "use client";
 
-import { useDebugValue, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 import Link from "next/link";
-import { useStyleRegistry } from "styled-jsx";
 
 
 export default function SignUpPage() {
@@ -30,7 +29,9 @@ export default function SignUpPage() {
 				lastName,
 			});
 			const token = response.data.token;
+			const userId = response.data.user.id as string;
 			localStorage.setItem("token", token);
+			localStorage.setItem("userId", userId);
 			router.push("/dashboard")
 		} catch (err: any) {
 			console.error(err.message);
