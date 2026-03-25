@@ -24,9 +24,15 @@ export const createCategory = async (req: authRequest, res: Response) => {
 			currency: "NGN",
 			accountAge: "2 years",
 		});
-		io.emit("fraud-alert", detectedFraud);
+    
+    res.status(201).json({ category });
 
-		res.status(201).json(transaction);
+    if (detectedFraud.risk === "High")
+      io.to(userId).emit("fraud-alert", {
+        transactionId: transaction.id,
+        ...detectedFraud
+      });
+
 	} catch (err: any) {
 		console.error("Conyrollet Error: [details] -->\t", err)
 		res.status(500).json({message: "Internal Server Error"});

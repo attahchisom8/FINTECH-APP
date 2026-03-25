@@ -1,6 +1,14 @@
 import type { Transaction } from "../generated/prisma/client";
 import { transformMessage } from "../utils/transform";
 import { aiEngine } from "../utils/aiClient";
+import { z } from "zod";
+
+// we use zod so Al doesnt return Nonsense,  i.e illegal json
+
+const fraudSchema = z.object({
+  risk: z.enum(["Low", "Medium", "High"]),
+  reason: z.string(),
+});
 
 export const detectFraud = async (
   transaction: Transaction & {
@@ -44,7 +52,9 @@ export const detectFraud = async (
     });
     const rawText = fraudRes.text;
     const fraudJson = rawText?.replace(/```json|```/gi, "").trim() || "{}";
-    return JSON.parse(fraudJson);
+    const parsedJson =  JSON.parse(fraudJson);
+
+    return fraudSchema.parse(parsedJson);
   } catch (err: any) {
     console.error('Service error: [details] -->\t', err);
     throw new Error(err);
