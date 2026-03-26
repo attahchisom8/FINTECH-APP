@@ -7,49 +7,76 @@ import { toast } from "sonner";
 export default function FraudAlert() {
   const [fraudAlerts, setFraudAlerts] = useState<any>([]);
   const [alertBox, setAlertBox] = useState<any | null>(null);
+  const [openTab, setOpenTab] = useState(false);
 
   useEffect(() => {
-    const listenForFraud = () => {
-      const userId = localStorage.getItem("userId");
-      if (!userId)
-        return;
+    const userId = localStorage.getItem("userId");
+    if (!userId)
+      return;
 
-      if (!socket.connected)
-        socket.connect();
+    if (!socket.connected)
+      socket.connect();
+      
+    socket.emit("join-room", userId);
 
-      socket.emit("join-room", userId);
-
-      socket.on("fraud-alert", (data: any) => {
-        setFraudAlerts((prev: any) => [ ...prev, data ]);
-        console.log("⚠️ Suspicious activity detected", data);
-        toast.error("⚠️ Fraud Alert", {
-          description: data.reason
-        });
-
-        setAlertBox(data);
+    socket.on("fraud-alert", (data: any) => {
+      setFraudAlerts((prev: any) => [ ...prev, data ]);
+      console.log("⚠️ Suspicious activity detected", data);
+      toast.error("⚠️ Critical security Alert",{
+        description: "Ambrose detected a high risk transaction",
+        duration: 10000,
       });
 
-      return () => socket.off("fraud-alert");
-    };
-    listenForFraud();
+      setAlertBox(data);
+    });
+
+    return () => {
+      socket.off("fraud-alert");
+    }
+      
   }, []);
 
   return (
     <div className="fraud-box">
-      <div className="num-frauds">
-        <h3>⚠️ fraud Alerts: { fraudAlerts.length }</h3>
+      <div className="fraud-status-box">
+        <div className="alert-bell">
+          <span className="bell">🔔</span>
+          { fraudAlerts.length > 0 && (
+            <span className="num-fraud pulse">
+              { fraudAlerts.length }
+            </span>
+          ) }
+        </div>
+        <h3 className="text-alert">
+        { fraudAlerts.length > 0 ? `${ fraudAlerts.length } security Alert` : "System Secure"}
+        </h3>
       </div>
       {alertBox && (
         <div className="pop-up">
-          <div className="alert-box">
-            <h2>⚠️ Fraud Alert</h2>
-            <p>Ambrose detected suspicious transaction in transaction { alertBox.transactionId }</p>
-            <p><strong>Reason:</strong> {alertBox.reason}</p>
-            <p><strong>Risk level:</strong> {alertBox.risk}</p>
-          </div>
+          <button
+            onClick={() => setOpenTab(true)}
+            type="button"
+            className="open-tab">
+              View Alerts
+            </button>
+            { openTab && fraudAlerts.length > 0 && (
+              <>
+               <h2>⚠️ Fraud Alert</h2>
+               {fraudAlerts.map((alert: any, idx: any) => (
+                <div className="alert-box" key={idx} >
+                  <p>Ambrose detected suspicious transaction in transaction { alert.transactionId }</p>
+                  <p><strong>Reason:</strong> {alert.reason}</p>
+                  <p><strong>Risk Level:</strong> {alert.risk}</p>
+                </div>
+               ))}
+              </>
+            )}
           <button
             type="button"
-            onClick={() => setAlertBox(null) }
+            onClick={() => {
+              setAlertBox(null);
+              setOpenTab(false);
+            }}
             className="close-alert-btn"
             >
               close

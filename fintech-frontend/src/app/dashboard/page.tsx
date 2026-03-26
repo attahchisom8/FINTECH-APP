@@ -12,7 +12,6 @@ import Link from "next/link";
 export default function Dashboard() {
 	const router = useRouter();
 	const [user, setUser] = useState<{
-	id: string,
     email: string,
     firstName: string,
     middleName?: string

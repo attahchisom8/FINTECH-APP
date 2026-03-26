@@ -53,6 +53,7 @@ export const detectFraud = async (
     const rawText = fraudRes.text;
     const fraudJson = rawText?.replace(/```json|```/gi, "").trim() || "{}";
     const parsedJson =  JSON.parse(fraudJson);
+    console.log("parsedJson: ", parsedJson);
 
     return fraudSchema.parse(parsedJson);
   } catch (err: any) {

@@ -1,5 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
+
 export const client = new GoogleGenAI({
 	apiKey: process.env.GOOGLE_GEMINI_KEY as string,
 });
@@ -34,6 +35,27 @@ export const aiEngine = async ({
     });
     return aiRes;
   } catch (err: any) {
-    throw new Error(err)
+    if (
+      err.message?.includes("409") || err.status === 409 || err.message?.includes("QOUTA")
+    ) {
+      console.log("Rate limit error, Returning fallback response...");
+
+      // Mimic genai response
+      return {
+        text: {
+        "risk": "High",
+        "reason": "preventing server retry"
+        },
+        "fallback": true
+      }
+    }
+    
+    console.error(err);
+    return {
+        text: {
+        "risk": "Low",
+        "reason": "General Error",
+        }
+    }
   }
 }
