@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+import { toUpperCase } from "zod";
 
 
 export const client = new GoogleGenAI({
@@ -36,26 +37,28 @@ export const aiEngine = async ({
     return aiRes;
   } catch (err: any) {
     if (
-      err.message?.includes("409") || err.status === 409 || err.message?.includes("QOUTA")
+      err.message?.includes("429") ||
+      err.status === 429 ||
+      err.message?.toUpperCase().includes("QUOTA")
     ) {
       console.log("Rate limit error, Returning fallback response...");
 
       // Mimic genai response
       return {
-        text: {
+        text: JSON.stringify({
         "risk": "High",
-        "reason": "preventing server retry"
-        },
-        "fallback": true
+        "reason": "preventing server retry, defaulting to high risk for safety"
+        }),
+        fallback: true
       }
     }
     
     console.error(err);
     return {
-        text: {
+        text: JSON.stringify({
         "risk": "Low",
-        "reason": "General Error",
-        }
+        "reason": "System Error occured during analysis",
+        })
+      }
     }
-  }
 }

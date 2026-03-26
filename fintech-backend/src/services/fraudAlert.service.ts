@@ -1,7 +1,7 @@
 import type { Transaction } from "../generated/prisma/client";
 import { transformMessage } from "../utils/transform";
 import { aiEngine } from "../utils/aiClient";
-import { z } from "zod";
+import { string, z } from "zod";
 
 // we use zod so Al doesnt return Nonsense,  i.e illegal json
 
@@ -50,7 +50,8 @@ export const detectFraud = async (
       systemInstruction,
       contents: chatMessages,
     });
-    const rawText = fraudRes.text;
+    const rawText = typeof(fraudRes.text) === 'string' ? fraudRes.text
+    : JSON.stringify(fraudRes.text);
     const fraudJson = rawText?.replace(/```json|```/gi, "").trim() || "{}";
     const parsedJson =  JSON.parse(fraudJson);
     console.log("parsedJson: ", parsedJson);
