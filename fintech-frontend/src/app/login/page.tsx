@@ -9,21 +9,27 @@ export default function LoginPage() {
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const [showPwd, setShowPwd] = useState(false);
+  const [loading, setLoading] = useState(false);
 	const router = useRouter();
 
 	const handleLogin = async (e: React.SubmitEvent) => {
 		e.preventDefault();
 		setError("");
+    setLoading(true);
 
 		try {
 			const response = await api.post("/auth/login", {email, password});
 			const token = response.data.token;
+			const userId = response.data.user.id as string;
 			localStorage.setItem("token", token);
+			localStorage.setItem("userId", userId);
 			router.push("/dashboard")
 		} catch (err: any) {
 			console.error(err.message);
 			setError(err.response?.data?.message || "Login failed");
-		}
+    } finally {
+      setLoading(false);
+    }
 	}
 
 	return (
@@ -40,6 +46,7 @@ export default function LoginPage() {
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 							placeholder="name@email.com"
+              disabled={ loading }
 							required
 							className="login-email"
 						/>
@@ -52,6 +59,7 @@ export default function LoginPage() {
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							placeholder="*****"
+              disabled={ loading }
 							required
 							className="login-password"
 						/>
@@ -66,8 +74,11 @@ export default function LoginPage() {
 					<div className="btn-box">
 						<button
 							type="submit"
+              disabled={ loading }
 							className="login-btn"
-						>Login</button>
+						>
+              { loading ? "Login you in..." : "Login" }
+            </button>
 					</div>
 				</form>
 				<p>Don't have an account?{" "}
@@ -80,4 +91,4 @@ export default function LoginPage() {
 	);
 }
 
-// NOTE u can use <link /> drom next/link in place of <a />
+// NOTE u can use <link /> from next/link in place of <a />

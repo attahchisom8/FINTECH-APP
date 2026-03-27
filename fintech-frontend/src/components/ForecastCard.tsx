@@ -19,7 +19,7 @@ export default function ForecastCard() {
   if (loading)
     return <p>loading...</p>
   if (!forecastData)
-    return <p>Wait a moment, loading forecast...</p>
+    return <p>Wait a moment, loading forecast details...</p>
   if (error)
       return <p className="text-red">{ error }</p>
 

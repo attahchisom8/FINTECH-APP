@@ -1,10 +1,9 @@
 "use client";
 
-import { useDebugValue, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 import Link from "next/link";
-import { useStyleRegistry } from "styled-jsx";
 
 
 export default function SignUpPage() {
@@ -15,11 +14,13 @@ export default function SignUpPage() {
 	const [lastName, setLastName] = useState("");
 	const [middleName, setMiddleName] = useState	("");
 	const [showPwd, setShowPwd] = useState(false);
+  const [loading, setLoading] = useState(false);
 	const router = useRouter();
 
 	const handleLogin = async (e: React.SubmitEvent) => {
 		e.preventDefault();
 		setError("");
+    setLoading(true);
 
 		try {
 			const response = await api.post("/auth/signup", {
@@ -30,12 +31,16 @@ export default function SignUpPage() {
 				lastName,
 			});
 			const token = response.data.token;
+			const userId = response.data.user.id as string;
 			localStorage.setItem("token", token);
-			router.push("/dashboard")
+			localStorage.setItem("userId", userId);
+			router.push("/dashboard?firstTime=true")
 		} catch (err: any) {
 			console.error(err.message);
 			setError(err.response?.data?.message || "Login failed");
-		}
+    } finally {
+      setLoading(false);
+    }
 	}
 
 	return (
@@ -52,6 +57,7 @@ export default function SignUpPage() {
 							value={firstName}
 							onChange={(e) => setFirstName(e.target.value)}
 							placeholder="First Name"
+              disabled={ loading }
 							required
 						/>
 					</div>
@@ -63,6 +69,7 @@ export default function SignUpPage() {
 							value={middleName}
 							onChange={(e) => setMiddleName(e.target.value)}
 							placeholder="Optional"
+              disabled={ loading }
 						/>
 					</div>
 					<div className="last-name-box">
@@ -73,6 +80,7 @@ export default function SignUpPage() {
 							value={lastName}
 							onChange={(e) => setLastName(e.target.value)}
 							placeholder="Last Name"
+              disabled={ loading }
 							required
 						/>
 					</div>
@@ -84,6 +92,7 @@ export default function SignUpPage() {
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 							placeholder="name@email.com"
+              disabled={ loading }
 							required
 							className="signup-email"
 						/>
@@ -96,6 +105,7 @@ export default function SignUpPage() {
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							placeholder="*****"
+              disabled={ loading }
 							required
 							className="sign-password"
 						/>
@@ -110,8 +120,11 @@ export default function SignUpPage() {
 					<div className="btn-box">
 						<button
 							type="submit"
+              disabled={ loading }
 							className="signup-btn"
-						>Sign up</button>
+						>
+              { loading ? "Creating account..." : "Sign Up" }
+            </button>
 					</div>
 				</form>
 				<p>Already have an account?{" "}

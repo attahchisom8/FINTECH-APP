@@ -33,8 +33,8 @@ export default function ForecastChart() {
 
   return (
     <div
-    style={{ width: "100%", height: "350px"}}
-    className="forecast-chart"
+    style={{ width: "100%", height: "350px" }}
+      className="forecast-chart"
     >
       <h2>View forecast data</h2>
       <ResponsiveContainer width="100%" height="100%">

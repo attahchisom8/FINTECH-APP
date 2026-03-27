@@ -1,0 +1,16 @@
+while i appreciate your effort in the previous code, ths isnt what i want
+hweres what i wnat
+The projrct Fintech-Hub should only have two dub directoty
+1.  fintech-frintend
+2. fintecch-backenc
+
+fintech-backend should have directories routes serices controllers lib utils with app.ts and server.ts and any other directoey that needed to be aadded
+
+of coursee frontebd will just be in the nomal set up for next 14
+
+dont forgt to use socketio for real time communicaion integraste gmibi too
+users can have as many wallet as they wish, but the default currency as soonas a user is created is NGN, users might have to change it during account creation
+
+most ioortantly i am comfirtable with prisma and monodb not postgre and drizle please retify ur use db and adhere bton my chioice very important
+
+pls i would aooreciate it if u refactor the project Fibtech-Hub code according to this standards
